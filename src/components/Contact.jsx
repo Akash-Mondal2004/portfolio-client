@@ -26,7 +26,7 @@ const contactItems = [
   },
   {
     icon: LinkedinIcon, label: 'Professional Network', value: 'linkedin.com/in/amanchandra',
-    href: 'https://www.linkedin.com/in/amanchandra', color: '#16a34a',
+    href: 'https://www.linkedin.com/in/aman-chandra-%F0%9F%A5%AC%F0%9F%AB%91%F0%9F%8D%83-02083b221', color: '#16a34a',
   },
 ];
 
