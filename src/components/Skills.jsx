@@ -47,7 +47,7 @@ export default function Skills() {
   ];
 
   return (
-    <section id="skills" className="py-24 relative overflow-hidden" style={{ background: '#ffffff' }}>
+    <section id="skills" className="py-14 relative overflow-hidden" style={{ background: '#ffffff' }}>
       {/* Decorative soft blobs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute -top-10 left-0 w-96 h-96" style={{
@@ -65,7 +65,7 @@ export default function Skills() {
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <motion.div
             initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="inline-flex items-center gap-2 text-sm font-bold tracking-widest uppercase mb-4 px-4 py-2 rounded-full"

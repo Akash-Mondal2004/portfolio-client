@@ -46,7 +46,7 @@ export default function Timeline() {
   return (
     <section
       id="experience"
-      className="py-24 relative overflow-hidden"
+      className="py-14 relative overflow-hidden"
       style={{ background: '#f8fffe' }}
     >
       {/* Subtle background blobs */}
@@ -72,7 +72,7 @@ export default function Timeline() {
       <div className="max-w-6xl mx-auto px-6 relative z-10">
 
         {/* ── Header ── */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-12">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -151,7 +151,7 @@ export default function Timeline() {
                   <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
 
                     {/* Left slot */}
-                    <div className={`${isLeft ? 'md:flex md:justify-end' : 'hidden md:block'}`}>
+                    <div className={`${isLeft ? 'hidden md:flex md:justify-end' : 'hidden md:block'}`}>
                       {isLeft ? (
                         // Card slides from LEFT
                         <motion.div
@@ -182,7 +182,7 @@ export default function Timeline() {
                     </div>
 
                     {/* Right slot */}
-                    <div className={`${!isLeft ? 'md:flex md:justify-start' : 'hidden md:block'}`}>
+                    <div className={`${!isLeft ? 'hidden md:flex md:justify-start' : 'hidden md:block'}`}>
                       {!isLeft ? (
                         // Card slides from RIGHT
                         <motion.div

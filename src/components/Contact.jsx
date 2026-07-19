@@ -62,7 +62,7 @@ export default function Contact() {
   });
 
   return (
-    <section id="contact" className="py-24 relative overflow-hidden" style={{ background: '#f0fdf4' }}>
+    <section id="contact" className="py-14 relative overflow-hidden" style={{ background: '#f0fdf4' }}>
       {/* Decorative blobs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-1/2" style={{
@@ -80,7 +80,7 @@ export default function Contact() {
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <motion.div
             initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="inline-flex items-center gap-2 text-sm font-bold tracking-widest uppercase mb-4 px-4 py-2 rounded-full"

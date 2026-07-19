@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Droplet, Leaf, Sprout, Wind, ArrowRight, ShieldCheck } from 'lucide-react';
+import profilePic from '../assets/amanchandraprofile.jpeg';
 
 // ── Leaf rain particle ──────────────────────────────────────────
 const LeafParticle = ({ delay, left, size, duration }) => (
@@ -87,25 +88,25 @@ export default function Hero() {
 
   const stats = [
     { value: '90%', label: 'Water Savings (NFT systems)', icon: Droplet },
-    { value: '3+', label: 'Years Smart Agri Experience', icon: Sprout },
+    { value: '5+', label: 'Years Smart Agri Experience', icon: Sprout },
     { value: '10+', label: 'High-Value Crops Managed', icon: Leaf },
   ];
 
   const particles = [
-    { delay: 0,  left: '8%',  size: 22, duration: 14 },
-    { delay: 3,  left: '18%', size: 30, duration: 18 },
-    { delay: 7,  left: '33%', size: 18, duration: 12 },
-    { delay: 1,  left: '55%', size: 26, duration: 16 },
-    { delay: 5,  left: '72%', size: 20, duration: 13 },
-    { delay: 9,  left: '82%', size: 32, duration: 20 },
-    { delay: 2,  left: '91%', size: 24, duration: 15 },
+    { delay: 0, left: '8%', size: 22, duration: 14 },
+    { delay: 3, left: '18%', size: 30, duration: 18 },
+    { delay: 7, left: '33%', size: 18, duration: 12 },
+    { delay: 1, left: '55%', size: 26, duration: 16 },
+    { delay: 5, left: '72%', size: 20, duration: 13 },
+    { delay: 9, left: '82%', size: 32, duration: 20 },
+    { delay: 2, left: '91%', size: 24, duration: 15 },
     { delay: 11, left: '45%', size: 16, duration: 11 },
   ];
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center pt-28 pb-20 overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center pt-24 pb-12 overflow-hidden"
       style={{ background: 'linear-gradient(160deg, #f0fdf4 0%, #ffffff 45%, #f0fdf4 100%)' }}
     >
       {/* Radial soft glow spots */}
@@ -257,37 +258,31 @@ export default function Hero() {
               border: '1px dotted rgba(34,197,94,0.35)',
             }} />
 
-            {/* Main orb */}
-            <div className="relative flex flex-col items-center justify-center rounded-full shadow-xl" style={{
-              width: 260, height: 260,
-              background: 'linear-gradient(145deg, #ffffff, #f0fdf4)',
-              border: '1.5px solid rgba(34,197,94,0.25)',
-              boxShadow: '0 20px 60px rgba(34,197,94,0.15), 0 0 0 1px rgba(34,197,94,0.08)',
-            }}>
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                className="w-24 h-24 rounded-full flex items-center justify-center"
+            {/* Main orb — profile photo */}
+            <div
+              className="relative overflow-hidden rounded-full shadow-2xl"
+              style={{
+                width: 260, height: 260,
+                border: '3px solid rgba(34,197,94,0.35)',
+                boxShadow: '0 20px 60px rgba(34,197,94,0.2), 0 0 0 6px rgba(34,197,94,0.07)',
+              }}
+            >
+              <img
+                src={profilePic}
+                alt="Aman Chandra"
+                className="w-full h-full object-cover object-top"
+              />
+              {/* Subtle green tint overlay at bottom */}
+              <div
+                className="absolute inset-0"
                 style={{
-                  background: 'rgba(22,163,74,0.1)',
-                  border: '1px solid rgba(22,163,74,0.3)',
-                  boxShadow: '0 0 25px rgba(34,197,94,0.15)',
+                  background: 'linear-gradient(to top, rgba(22,163,74,0.18) 0%, transparent 55%)',
                 }}
-              >
-                <Sprout className="w-12 h-12" style={{ color: '#16a34a' }} />
-              </motion.div>
-              <div className="mt-4 text-center">
-                <span className="block text-[10px] uppercase tracking-[0.2em] font-bold" style={{ color: '#16a34a' }}>
-                  SMART GROWING
-                </span>
-                <span className="block text-sm mt-1" style={{ color: '#4b7a5e' }}>
-                  Ecosystem Optimizer
-                </span>
-              </div>
+              />
             </div>
 
             {/* Orbital floating tags */}
-            <div
+            {/* <div
               className="absolute -top-2 right-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold shadow-lg transition-all duration-300 hover:scale-105"
               style={{
                 background: 'rgba(255,255,255,0.95)',
@@ -310,7 +305,7 @@ export default function Hero() {
             >
               <Wind className="w-4 h-4 flex-shrink-0" style={{ color: '#16a34a' }} />
               Precision Fertigation
-            </div>
+            </div> */}
           </div>
         </motion.div>
 

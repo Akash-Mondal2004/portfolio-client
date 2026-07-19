@@ -9,7 +9,7 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
-      const sections = ['home', 'dashboard', 'experience', 'skills', 'projects', 'contact'];
+      const sections = ['home', 'experience', 'skills', 'gallery', 'projects', 'contact'];
       const scrollPosition = window.scrollY + 120;
       for (const section of sections) {
         const el = document.getElementById(section);
@@ -31,6 +31,7 @@ export default function Navbar() {
     { name: 'Home', id: 'home' },
     { name: 'Experience', id: 'experience' },
     { name: 'Skills', id: 'skills' },
+    { name: 'Gallery', id: 'gallery' },
     { name: 'Projects', id: 'projects' },
     { name: 'Contact', id: 'contact' }
   ];

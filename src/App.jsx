@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Timeline from './components/Timeline';
 import Skills from './components/Skills';
+import Gallery from './components/Gallery';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 
@@ -15,6 +16,7 @@ function App() {
         <Hero />
         <Timeline />
         <Skills />
+        <Gallery />
         <Projects />
         <Contact />
       </main>
