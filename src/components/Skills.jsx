@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Leaf, Truck, BarChart4, Cpu, Droplet, Warehouse, ShieldAlert, BarChart3, Palette, Compass } from 'lucide-react';
-
+import { CheckCircle, SearchCheck, ClipboardList, PackageCheck } from 'lucide-react';
 export default function Skills() {
   const skillCategories = [
     {
@@ -42,6 +42,20 @@ export default function Skills() {
         { name: 'Sustainable Resource Optimization', icon: Compass },
         { name: 'Data Analysis & Yield Uplifts', icon: BarChart4 },
         { name: 'Landscaping & Canopy Design', icon: Palette },
+      ]
+    },
+    {
+      title: 'Quality Assurance & Sourcing',
+      icon: CheckCircle,
+      description: 'Ensuring produce meets grade standards through rigorous inspection, sourcing, and quality control protocols.',
+      color: '#059669',
+      lightBg: 'rgba(5,150,105,0.08)',
+      lightBorder: 'rgba(5,150,105,0.2)',
+      skills: [
+        { name: 'Fruit & Vegetable Quality Grading', icon: CheckCircle },
+        { name: 'Quality Control & Inspection', icon: SearchCheck },
+        { name: 'Vendor & Produce Sourcing', icon: ClipboardList },
+        { name: 'Post-Harvest Handling Standards', icon: PackageCheck },
       ]
     }
   ];

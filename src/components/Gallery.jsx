@@ -13,7 +13,7 @@ import pic8 from '../assets/amanchandrapic8.jpeg';
 import pic9 from '../assets/amanchandrapic9.jpeg';
 
 const photos = [
-  { src: pic1, caption: 'Plants Proper Care', tag: 'Farmcult Agri-tech' },
+  { src: pic1, caption: 'Plants Proper Care', tag: 'Agri-tech' },
   { src: pic2, caption: 'Polyhouse Operations', tag: 'Protected Cultivation' },
   { src: pic3, caption: 'Crop Inspection', tag: 'Quality Control' },
   { src: pic4, caption: 'Tomato Harvest', tag: 'High-Value Crops' },

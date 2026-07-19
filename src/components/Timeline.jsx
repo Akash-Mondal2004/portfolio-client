@@ -3,18 +3,18 @@ import { motion } from 'framer-motion';
 import { Briefcase, Calendar, MapPin, CheckCircle2 } from 'lucide-react';
 
 const experiences = [
-  // {
-  //   role: 'Senior Agronomist and Market Linkage Manager',
-  //   company: 'Farmcult Agri-tech Pvt. Ltd',
-  //   period: 'April 2025 – Present',
-  //   location: 'Delhi NCR, India',
-  //   current: true,
-  //   highlights: [
-  //     'Managed commercial-scale hydroponic farming operations including crop planning, nutrient recipe management, irrigation schedules, and climate systems using NFT, DWC, Dutch Bucket, and Cocopeat systems.',
-  //     'Experienced in precision fertigation management, EC/pH monitoring, and worked under Greenhouse/NVPH Polyhouse conditions for premium high-value crops (Seedless Cucumber, Bell Peppers, Tomatoes, Lettuce, Coriander).',
-  //     'Evaluated crop quality parameters including size, firmness, marketability, and disease resistance, ensuring full safety standard compliance during harvesting and post-harvest.',
-  //   ],
-  // },
+  {
+    role: 'Senior Agronomist and Market Linkage Manager',
+    company: 'Farmcult Agri-tech Pvt. Ltd',
+    period: 'April 2025 – Present',
+    location: 'Delhi NCR, India',
+    current: true,
+    highlights: [
+      'Managed commercial-scale hydroponic farming operations including crop planning, nutrient recipe management, irrigation schedules, and climate systems using NFT, DWC, Dutch Bucket, and Cocopeat systems.',
+      'Experienced in precision fertigation management, EC/pH monitoring, and worked under Greenhouse/NVPH Polyhouse conditions for premium high-value crops (Seedless Cucumber, Bell Peppers, Tomatoes, Lettuce, Coriander).',
+      'Evaluated crop quality parameters including size, firmness, marketability, and disease resistance, ensuring full safety standard compliance during harvesting and post-harvest.',
+    ],
+  },
   {
     role: 'Agronomist (Farm Executive) – Hydroponic & FMCG Supply Chain',
     company: 'Hyper Pure by Zomato',
