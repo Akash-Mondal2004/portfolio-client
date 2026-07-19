@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, Check } from 'lucide-react';
-
+import emailjs from '@emailjs/browser';
 const LinkedinIcon = (props) => (
   <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2"
     fill="none" strokeLinecap="round" strokeLinejoin="round" className={props.className}>
@@ -36,17 +36,30 @@ export default function Contact() {
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+  const [error, setError] = useState(null);
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
+
+  emailjs.send(
+  import.meta.env.VITE_EMAILJS_SERVICE_ID,
+  import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+  { name: form.name, message: form.message, from_email: form.email },
+  import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+)
+    .then(() => {
       setSent(true);
       setForm({ name: '', email: '', message: '' });
       setTimeout(() => setSent(false), 5000);
-    }, 1200);
-  };
-
+    })
+    .catch((err) => {
+      console.error('EmailJS error:', err);
+      setError('Something went wrong. Please try again or email me directly.');
+    })
+    .finally(() => setLoading(false));
+};
   const inputStyle = (name) => ({
     width: '100%',
     padding: '14px 16px',

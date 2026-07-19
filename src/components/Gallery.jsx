@@ -13,11 +13,11 @@ import pic8 from '../assets/amanchandrapic8.jpeg';
 import pic9 from '../assets/amanchandrapic9.jpeg';
 
 const photos = [
-  { src: pic1, caption: 'Seedling Management', tag: 'Farmcult Agri-tech' },
+  { src: pic1, caption: 'Plants Proper Care', tag: 'Farmcult Agri-tech' },
   { src: pic2, caption: 'Polyhouse Operations', tag: 'Protected Cultivation' },
   { src: pic3, caption: 'Crop Inspection', tag: 'Quality Control' },
   { src: pic4, caption: 'Tomato Harvest', tag: 'High-Value Crops' },
-  { src: pic5, caption: 'Soil Based Setup', tag: 'NFT System' },
+  { src: pic5, caption: 'Soil Based Farming', tag: 'Open Field Cultivation' },
   { src: pic6, caption: 'Nutrient Management', tag: 'Fertigation' },
   { src: pic7, caption: 'Bell Pepper Yield', tag: 'Cocopeat System' },
   { src: pic8, caption: 'Farm Operations', tag: 'CEA Facility' },
