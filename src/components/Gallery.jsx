@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, Leaf } from 'lucide-react';
 
@@ -24,34 +24,28 @@ const photos = [
   { src: pic9, caption: 'Greenhouse Monitoring', tag: 'Smart Agriculture' },
 ];
 
-// Split into two rows — row 1: first 5, row 2: last 4 + first 1 for visual balance
-const row1 = [...photos.slice(0, 5), ...photos.slice(0, 5)]; // duplicated for seamless loop
-const row2 = [...photos.slice(4),    ...photos.slice(4)];    // offset + duplicated
+// Duplicate photos so each row loops seamlessly (we translate -50%)
+const row1 = [...photos.slice(0, 5), ...photos.slice(0, 5)];
+const row2 = [...photos.slice(4), ...photos.slice(4)];
 
+/* ── Single photo card ───────────────────────────────────────── */
 function PhotoCard({ src, caption, tag }) {
   return (
     <div
-      className="relative flex-shrink-0 rounded-2xl overflow-hidden group cursor-pointer"
-      style={{ width: 280, height: 360 }}
+      className="relative flex-shrink-0 rounded-2xl overflow-hidden group"
+      style={{ width: 280, height: 360, pointerEvents: 'none' }}
     >
-      {/* Photo */}
       <img
         src={src}
         alt={caption}
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         draggable={false}
       />
-
-      {/* Gradient overlay — always subtle, stronger on hover */}
       <div
-        className="absolute inset-0 transition-opacity duration-300"
-        style={{
-          background: 'linear-gradient(to top, rgba(5,46,22,0.75) 0%, rgba(5,46,22,0.1) 45%, transparent 70%)',
-        }}
+        className="absolute inset-0"
+        style={{ background: 'linear-gradient(to top, rgba(5,46,22,0.75) 0%, rgba(5,46,22,0.1) 45%, transparent 70%)' }}
       />
-
-      {/* Bottom caption */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+      <div className="absolute bottom-0 left-0 right-0 p-4">
         <span
           className="inline-block text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2"
           style={{ background: 'rgba(34,197,94,0.3)', color: '#86efac', backdropFilter: 'blur(6px)' }}
@@ -60,8 +54,6 @@ function PhotoCard({ src, caption, tag }) {
         </span>
         <p className="text-sm font-bold text-white leading-tight">{caption}</p>
       </div>
-
-      {/* Corner shine on hover */}
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
         style={{ boxShadow: 'inset 0 0 0 1.5px rgba(34,197,94,0.4)' }}
@@ -70,26 +62,110 @@ function PhotoCard({ src, caption, tag }) {
   );
 }
 
-/* ── Marquee row component ─────────────────────────────────── */
-function MarqueeRow({ photos, direction = 'left', speed = 40 }) {
-  // direction: 'left' = normal, 'right' = reverse
-  const animationName = direction === 'left' ? 'marquee-left' : 'marquee-right';
+/* ── Draggable auto-scrolling marquee track ──────────────────── */
+function MarqueeTrack({ photos, direction = 'left', pxPerSec = 70 }) {
+  const trackRef = useRef(null);
+  const posRef = useRef(null);   // null = not yet initialized
+  const halfRef = useRef(0);
+  const rafRef = useRef(null);
+  const isDragging = useRef(false);
+  const lastTS = useRef(null);
+  const dragStartX = useRef(0);
+  const dragStartP = useRef(0);
+  const velRef = useRef(0);      // momentum velocity px/frame
+  const lastDragX = useRef(0);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    // Wait one frame so images have laid out and scrollWidth is accurate
+    const init = () => {
+      halfRef.current = track.scrollWidth / 2;
+      // left → start at 0, right → start at -half so it slides rightward toward 0
+      if (posRef.current === null) {
+        posRef.current = direction === 'right' ? -halfRef.current : 0;
+      }
+    };
+    requestAnimationFrame(init);
+
+    function loop(ts) {
+      const half = halfRef.current;
+      if (half === 0) { rafRef.current = requestAnimationFrame(loop); return; }
+
+      if (!isDragging.current) {
+        // Apply momentum decay after release
+        if (Math.abs(velRef.current) > 0.3) {
+          posRef.current += velRef.current;
+          velRef.current *= 0.93;           // friction
+        } else {
+          velRef.current = 0;
+          // Normal auto-scroll
+          const dt = lastTS.current ? ts - lastTS.current : 16;
+          const delta = pxPerSec * (dt / 1000);
+          posRef.current += direction === 'left' ? -delta : delta;
+        }
+      }
+
+      // Wrap around seamlessly
+      if (posRef.current <= -half) posRef.current += half;
+      if (posRef.current >= 0 && direction === 'right') posRef.current -= half;
+
+      lastTS.current = ts;
+      track.style.transform = `translateX(${posRef.current}px)`;
+      rafRef.current = requestAnimationFrame(loop);
+    }
+
+    rafRef.current = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [direction, pxPerSec]);
+
+  /* pointer events for drag */
+  const onPointerDown = (e) => {
+    isDragging.current = true;
+    dragStartX.current = e.clientX;
+    dragStartP.current = posRef.current;
+    lastDragX.current = e.clientX;
+    velRef.current = 0;
+    lastTS.current = null;
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e) => {
+    if (!isDragging.current) return;
+    const delta = e.clientX - dragStartX.current;
+    velRef.current = e.clientX - lastDragX.current;  // track velocity
+    lastDragX.current = e.clientX;
+
+    let newPos = dragStartP.current + delta;
+    const half = halfRef.current;
+    // keep in bounds for wrap
+    if (newPos <= -half) newPos += half;
+    if (newPos > 0) newPos -= half;
+    posRef.current = newPos;
+  };
+
+  const onPointerUp = () => {
+    isDragging.current = false;
+    // velRef already has the last drag velocity for momentum
+  };
 
   return (
     <div
-      className="flex gap-5 w-max"
-      style={{
-        animation: `${animationName} ${speed}s linear infinite`,
-        willChange: 'transform',
-      }}
+      ref={trackRef}
+      className="flex gap-5 cursor-grab active:cursor-grabbing select-none"
+      style={{ width: 'max-content', willChange: 'transform' }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerLeave={onPointerUp}
     >
-      {photos.map((photo, i) => (
-        <PhotoCard key={i} {...photo} />
-      ))}
+      {photos.map((p, i) => <PhotoCard key={i} {...p} />)}
     </div>
   );
 }
 
+/* ── Gallery Section ─────────────────────────────────────────── */
 export default function Gallery() {
   return (
     <section
@@ -108,7 +184,7 @@ export default function Gallery() {
       </div>
 
       <div className="relative z-10">
-        {/* ── Header ── */}
+        {/* Header */}
         <div className="text-center max-w-3xl mx-auto px-6 mb-10">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -146,62 +222,40 @@ export default function Gallery() {
             className="text-base leading-relaxed"
             style={{ color: '#4b7a5e' }}
           >
-            A visual journey through commercial hydroponic farms, hands-on crop management, and the thriving ecosystems Aman has built from the ground up.
+            A visual journey through commercial hydroponic farms, hands-on crop management, and the
+            thriving ecosystems Aman has built from the ground up.{' '}
+            <span className="font-semibold" style={{ color: '#16a34a' }}>Drag to explore →</span>
           </motion.p>
         </div>
 
-        {/* ── Row 1: scrolls LEFT ── */}
+        {/* Row 1 — scrolls LEFT, faster */}
         <div
-          className="overflow-hidden mb-5"
-          style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}
-          onMouseEnter={(e) => { e.currentTarget.querySelector('.marquee-inner').style.animationPlayState = 'paused'; }}
-          onMouseLeave={(e) => { e.currentTarget.querySelector('.marquee-inner').style.animationPlayState = 'running'; }}
+          className="overflow-hidden mb-5 touch-pan-y"
+          style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)' }}
         >
-          <div
-            className="marquee-inner flex gap-5"
-            style={{
-              animation: `marquee-left 45s linear infinite`,
-              willChange: 'transform',
-            }}
-          >
-            {row1.map((photo, i) => <PhotoCard key={i} {...photo} />)}
-          </div>
+          <MarqueeTrack photos={row1} direction="left" pxPerSec={55} />
         </div>
 
-        {/* ── Row 2: scrolls RIGHT ── */}
+        {/* Row 2 — scrolls RIGHT, slightly slower for depth effect */}
         <div
-          className="overflow-hidden"
-          style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}
-          onMouseEnter={(e) => { e.currentTarget.querySelector('.marquee-inner-r').style.animationPlayState = 'paused'; }}
-          onMouseLeave={(e) => { e.currentTarget.querySelector('.marquee-inner-r').style.animationPlayState = 'running'; }}
+          className="overflow-hidden touch-pan-y"
+          style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)' }}
         >
-          <div
-            className="marquee-inner-r flex gap-5"
-            style={{
-              animation: `marquee-right 50s linear infinite`,
-              willChange: 'transform',
-            }}
-          >
-            {row2.map((photo, i) => <PhotoCard key={i} {...photo} />)}
-          </div>
+          <MarqueeTrack photos={row2} direction="right" pxPerSec={50} />
         </div>
 
-        {/* ── Leaf badge row ── */}
+        {/* Technique tags */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-wrap justify-center gap-3 mt-12 px-6"
+          className="flex flex-wrap justify-center gap-3 mt-10 px-6"
         >
           {['NFT Systems', 'Cocopeat Media', 'DWC & Dutch Bucket', 'NVPH Polyhouse', 'Precision Fertigation', 'High-Value Crops'].map((tag) => (
             <span
               key={tag}
               className="flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-full"
-              style={{
-                background: 'rgba(22,163,74,0.08)',
-                color: '#16a34a',
-                border: '1px solid rgba(22,163,74,0.2)',
-              }}
+              style={{ background: 'rgba(22,163,74,0.08)', color: '#16a34a', border: '1px solid rgba(22,163,74,0.2)' }}
             >
               <Leaf className="w-3 h-3" />
               {tag}
